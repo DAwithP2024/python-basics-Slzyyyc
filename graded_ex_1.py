@@ -51,17 +51,22 @@ def add_to_cart(cart, product, quantity):
 def display_cart(cart):
     if not cart:
         print("Your cart is empty.")
-        return 0  # Return 0 as total cost
+        return 0  # Return 0 as total cost if cart is empty
+    
     total_cost = 0
+    cart_output = []
     for product, price, quantity in cart:
         item_cost = price * quantity
         total_cost += item_cost
-        print(f"{product} - ${price} x {quantity} = ${item_cost}")
+        cart_output.append(f"{product} - ${price} x {quantity} = ${item_cost}")
+    
+    # Combine all items into a single output with newlines
+    print("\n".join(cart_output))
     print(f"Total cost: ${total_cost}")
-    return total_cost  # Ensure to return the total cost
+    
+    return total_cost  # Ensure the total cost is returned
 
 def generate_receipt(name, email, cart, total_cost, address):
-    print("\n===== RECEIPT =====")
     print(f"Customer: {name}")
     print(f"Email: {email}")
     print("Items Purchased:")
@@ -71,7 +76,6 @@ def generate_receipt(name, email, cart, total_cost, address):
     print(f"Delivery Address: {address}")
     print("Your items will be delivered in 3 days.")
     print("Payment will be accepted upon delivery.")
-    print("===================\n")
 
 def validate_name(name):
     if len(name.split()) != 2 or not all(part.isalpha() for part in name.split()):
@@ -129,19 +133,17 @@ def main():
                     continue
                 
                 add_to_cart(cart, product, int(quantity))
-                print(f"Added {quantity} x {product[0]} to your cart.")
             
             elif action_choice == '2':
                 sort_order = input("Sort by price: 1. Ascending 2. Descending\nChoose option: ")
                 if sort_order == '1':
-                    selected_products = display_sorted_products(selected_products, "asc")
+                    sorted_products = display_sorted_products(selected_products, "asc")
                 elif sort_order == '2':
-                    selected_products = display_sorted_products(selected_products, "desc")
+                    sorted_products = display_sorted_products(selected_products, "desc")
                 else:
                     print("Invalid sort order.")
                     continue
-                print("Products sorted by price:")
-                display_products(selected_products)
+                display_products(sorted_products)
             
             elif action_choice == '3':
                 break  # Back to categories
@@ -154,8 +156,6 @@ def main():
                 else:
                     print("Thank you for using our portal. Hope you buy something from us next time. Have a nice day.")
                 return
-            else:
-                print("Invalid action. Please choose a valid option.")
 
 if __name__ == "__main__":
     main()
