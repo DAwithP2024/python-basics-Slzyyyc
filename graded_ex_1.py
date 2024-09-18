@@ -1,4 +1,4 @@
-# Products available in the store by category 
+
 products = {
     "IT Products": [
         ("Laptop", 1000),
@@ -44,14 +44,22 @@ def display_categories():
     print("Categories available:")
     for idx, category in enumerate(products.keys(), 1):
         print(f"{idx}. {category}")
+    
+    category_choice = input("Please select a category (number): ")
+    
+    if not category_choice.isdigit() or int(category_choice) not in range(1, len(products) + 1):
+        print("Invalid selection. Please choose a valid category number.")
+        return None
+    
+    return int(category_choice) - 1  
 
 def add_to_cart(cart, product, quantity):
-    cart.append((product[0], product[1], quantity))  # Add product name, price, and quantity
+    cart.append((product[0], product[1], quantity))  
 
 def display_cart(cart):
     if not cart:
         print("Your cart is empty.")
-        return 0  # Return 0 as total cost if cart is empty
+        return 0  
     
     total_cost = 0
     cart_output = []
@@ -60,11 +68,11 @@ def display_cart(cart):
         total_cost += item_cost
         cart_output.append(f"{product} - ${price} x {quantity} = ${item_cost}")
     
-    # Combine all items into a single output with newlines
+    
     print("\n".join(cart_output))
     print(f"Total cost: ${total_cost}")
     
-    return total_cost  # Ensure the total cost is returned
+    return total_cost  
 
 def generate_receipt(name, email, cart, total_cost, address):
     print(f"Customer: {name}")
@@ -88,33 +96,31 @@ def validate_email(email):
 def main():
     cart = []
     
-    # Get and validate user's name
+
     while True:
         name = input("Please enter your full name: ")
         if validate_name(name):
             break
         print("Invalid name. Please enter your first and last name using only alphabets.")
     
-    # Get and validate email
+
     while True:
         email = input("Please enter your email address: ")
         if validate_email(email):
             break
         print("Invalid email address. Please enter a valid email address.")
     
-    # Display categories and process user interaction
+    
     while True:
-        display_categories()
-        category_choice = input("Please select a category (number): ")
+        category_index = display_categories()
         
-        if not category_choice.isdigit() or int(category_choice) not in range(1, len(products) + 1):
-            print("Invalid selection. Please choose a valid category number.")
-            continue
+        if category_index is None:
+            continue  
         
-        selected_category = list(products.keys())[int(category_choice) - 1]
+        selected_category = list(products.keys())[category_index]
         selected_products = products[selected_category]
         
-        # Display products and take actions
+    
         while True:
             display_products(selected_products)
             action_choice = input("1. Select product to buy\n2. Sort products by price\n3. Back to categories\n4. Finish shopping\nChoose an action: ")
@@ -146,7 +152,7 @@ def main():
                 display_products(sorted_products)
             
             elif action_choice == '3':
-                break  # Back to categories
+                break  
             
             elif action_choice == '4':
                 if cart:
